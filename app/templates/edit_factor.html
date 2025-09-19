@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Edit Factor for {{ factor.month_year }}</legend>
+                {{ render_field(form.month_year) }}
+                {{ render_field(form.value) }}
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+                <a href="{{ url_for('manage_factors') }}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

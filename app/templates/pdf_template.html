@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Demonstrativo de Simulação</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 9pt;
+        }
+        .header, .footer {
+            text-align: center;
+        }
+        .header h4, .header h5 {
+            margin: 0;
+            font-weight: bold;
+        }
+        .info-table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+            border: 1px solid black;
+        }
+        .info-table td {
+            border: 1px solid black;
+            padding: 2px;
+        }
+        .main-table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        .main-table th, .main-table td {
+            border: 1px solid black;
+            padding: 2px;
+        }
+        .main-table th {
+            font-weight: bold;
+            font-size: 8pt;
+        }
+        .col-month { width: 8%; }
+        .col-salary { width: 12%; }
+        .col-factor { width: 12%; }
+        .col-adjusted { width: 12%; }
+        .col-avg { width: 12%; }
+        .col-time { width: 22%; }
+        .col-comp { width: 22%; }
+
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+        .summary-section { margin-top: 20px; }
+        .signature-section { margin-top: 40px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h4>INSTITUTO DE PREVIDÊNCIA DOS SERVIDORES MUNICIPAIS DE MORADA NOVA</h4>
+        <h5>DEMONSTRATIVO DO RESULTADO DA SIMULAÇÃO DO CÁLCULO DA RENDA MENSAL (90%)</h5>
+    </div>
+
+    <table class="info-table">
+        <tr>
+            <td colspan="4" class="text-left"><strong>SERVIDORA:</strong> {{ simulation.server_name }}</td>
+        </tr>
+        <tr>
+            <td class="text-left"><strong>DATA DE NASCIMENTO:</strong> {{ simulation.dob.strftime('%d/%m/%Y') }}</td>
+            <td class="text-left" colspan="2"><strong>TIPO DE BENEFÍCIO:</strong> {{ simulation.benefit_type }}</td>
+            <td class="text-left"><strong>SEXO:</strong> {{ simulation.gender }}</td>
+        </tr>
+    </table>
+
+    <table class="main-table">
+        <thead>
+            <tr>
+                <th class="col-month">MÊS</th>
+                <th class="col-salary">SALÁRIO</th>
+                <th class="col-factor">FATOR SIMPLIFICADO (MULTIPLICAR)</th>
+                <th class="col-adjusted">SALÁRIO SIMPLIFICADO</th>
+                <th class="col-avg">MÉDIA 90%</th>
+                <th class="col-time">ANOS/DIAS/TRABALHADOS (30/35)</th>
+                <th class="col-comp">COMPLEMENTAÇÃO CONSTITUCIONAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for month_data in report_data %}
+            <tr>
+                <td>{{ month_data.month_year }}</td>
+                <td class="text-right">{{ "%.2f"|format(month_data.salary) if month_data.salary else '0.00' }}</td>
+                <td class="text-right">{{ "%.6f"|format(month_data.factor) if month_data.factor else '' }}</td>
+                <td class="text-right">{{ "%.2f"|format(month_data.adjusted) if month_data.adjusted else '0.00' }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            {% endfor %}
+            <!-- Summary Row -->
+            <tr>
+                <td colspan="3" class="text-right"><strong>TOTAL:</strong></td>
+                <td class="text-right"><strong>{{ "R$ %.2f"|format(total_adjusted) }}</strong></td>
+                <td class="text-right"><strong>{{ "R$ %.2f"|format(simulation.result) }}</strong></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="summary-section">
+        <p>Obs: No salário da Aposentadoria está embutido o valor do Anuênio, considerando que o salário de contribuição para o cálculo foi constituído de Vencimento Base + Anuênio.</p>
+        <p>
+            Média dos 90% maiores salários de contribuição = {{ "%.2f"|format(sum_top_90) }} / {{ count_top_90 }} = <strong>{{ "%.2f"|format(simulation.result) }}</strong>
+        </p>
+        <h4>TOTAL DE PROVENTOS: R$ {{ "%.2f"|format(simulation.result) }}</h4>
+    </div>
+
+    <div class="signature-section">
+        <p>Morada Nova, {{ today_date }}.</p>
+    </div>
+
+</body>
+</html>

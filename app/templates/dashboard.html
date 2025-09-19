@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>My Simulations</h2>
+        <a href="{{ url_for('create_simulation') }}" class="btn btn-primary">Create New Simulation</a>
+    </div>
+    <hr>
+    <div class="content-section">
+        {% if simulations %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Server Name</th>
+                        <th>Date Created</th>
+                        <th>Benefit Type</th>
+                        <th>Result</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sim in simulations %}
+                        <tr>
+                            <td>{{ sim.server_name }}</td>
+                            <td>{{ sim.created_at.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ sim.benefit_type }}</td>
+                            <td>{{ "R$ %.2f"|format(sim.result) if sim.result is not none else "Not calculated" }}</td>
+                            <td>
+                                <a href="{{ url_for('enter_salaries', simulation_id=sim.id) }}" class="btn btn-sm btn-secondary">Edit Salaries</a>
+                                <a href="{{ url_for('generate_pdf', simulation_id=sim.id) }}" class="btn btn-sm btn-info">Download PDF</a>
+                                <a href="{{ url_for('delete_simulation', simulation_id=sim.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure? This will delete the simulation and all its salary data.');">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>You haven't created any simulations yet. <a href="{{ url_for('create_simulation') }}">Get started now!</a></p>
+        {% endif %}
+    </div>
+{% endblock content %}

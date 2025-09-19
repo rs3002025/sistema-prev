@@ -1,0 +1,7 @@
+Flask
+Flask-SQLAlchemy
+Flask-Login
+WeasyPrint
+Flask-Bcrypt
+Flask-WTF
+email-validator

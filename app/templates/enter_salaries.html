@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <h2>Enter Salaries for {{ simulation.server_name }}</h2>
+    <p>Enter the base salary for each contribution month. The system will apply the correction factor automatically.</p>
+    <form method="POST" action="{{ url_for('calculate_salaries', simulation_id=simulation.id) }}">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Month/Year</th>
+                    <th>Salary</th>
+                    <th>Factor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for factor in factors %}
+                <tr>
+                    <td>{{ factor.month_year }}</td>
+                    <td>
+                        <input type="number" step="0.01" name="salary_{{ factor.month_year }}"
+                               value="{{ existing_salaries.get(factor.month_year, '') }}"
+                               class="form-control salary-input">
+                    </td>
+                    <td>{{ factor.value }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Calculate & Save Results</button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const inputs = Array.from(document.querySelectorAll('.salary-input'));
+    inputs.forEach((input, index) => {
+        input.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const nextInput = inputs[index + 1];
+                if (nextInput) {
+                    nextInput.focus();
+                } else {
+                    // Optionally, submit the form if it's the last input
+                    // this.form.submit();
+                }
+            }
+        });
+    });
+});
+</script>
+{% endblock content %}
