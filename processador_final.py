@@ -31,6 +31,11 @@ def parse_with_strategy(file_path, strategy):
     return None
 
 strategies = [
+    # Estratégias dedicadas para os 3 arquivos que falharam
+    (8, {'unnamed: 1': 'competencia', 'unnamed: 2': 'fator'}), # Para 3a_120217-142013-673.xls
+    (7, {'unnamed: 1': 'competencia', 'unnamed: 2': 'fator'}), # Para Ca_pia... e Copiaa_dea...
+
+    # Estratégias genéricas
     (9, {'competência': 'competencia', 'fator simplificado (multiplicar)': 'fator'}),
     (7, {'mês': 'competencia', 'fator simplificado': 'fator'}),
     (6, {'mês': 'competencia', 'fator': 'fator'}),
@@ -38,8 +43,6 @@ strategies = [
     (6, {'competência': 'competencia', 'fator': 'fator'}),
     (7, {'competência': 'competencia', 'fator': 'fator'}),
     (9, {'unnamed: 1': 'competencia', 'unnamed: 2': 'fator'}),
-    (8, {'unnamed: 1': 'competencia', 'unnamed: 2': 'fator'}),
-    (7, {'unnamed: 1': 'competencia', 'unnamed: 2': 'fator'}),
     (7, {'mês': 'competencia', 'fator': 'fator'}),
     (8, {'mês': 'competencia', 'fator simplificado (multiplicar)': 'fator'}),
 ]
