@@ -1,12 +1,3 @@
+
 # Ignorar a pasta com as planilhas baixadas
 planilhas/
-processados/
-
-# Ignorar arquivos de dados gerados
-dados_combinados.csv
-dados_finais_combinados.csv
-dados_consolidados.csv
-links.txt
-
-# Ignorar arquivos de log
-*.log
